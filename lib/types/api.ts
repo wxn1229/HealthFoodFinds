@@ -75,3 +75,12 @@ export interface ApiError {
 
 // 用於 Axios 響應類型
 export type SignupApiResponse = AxiosResponse<SignupResponse>;
+
+export interface ResetPasswordCredentials {
+  token: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordCredentials {
+  email: string;
+}

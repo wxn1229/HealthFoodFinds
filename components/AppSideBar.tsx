@@ -24,6 +24,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/store/features/userSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export function AppSidebar() {
   const dispatch = useAppDispatch();
@@ -42,7 +43,7 @@ export function AppSidebar() {
             {state === "collapsed" ? "HF" : "Health Food Finds"}
           </Link>
           {state === "expanded" && (
-            <Button variant="outline" onClick={toggleSidebar}>
+            <Button variant="ghost" onClick={toggleSidebar}>
               <PanelLeftClose />
             </Button>
           )}
@@ -54,10 +55,11 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         {state === "collapsed" && (
-          <Button variant="outline" onClick={toggleSidebar}>
+          <Button variant="ghost" onClick={toggleSidebar}>
             <PanelLeftOpen />
           </Button>
         )}
+        <ThemeToggle />
 
         <SidebarMenu>
           <SidebarMenuItem>
@@ -71,14 +73,14 @@ export function AppSidebar() {
                     </>
                   ) : (
                     <>
-                      <User2 /> Username
+                      <User2 /> Login
                       <ChevronUp className="ml-auto" />
                     </>
                   )}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                side="top"
+                side="right"
                 className="w-[--radix-popper-anchor-width]"
               >
                 {!user.isAuthenticated && (
@@ -90,12 +92,6 @@ export function AppSidebar() {
                 )}
                 {user.isAuthenticated && (
                   <>
-                    <DropdownMenuItem>
-                      <span>Account</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <span>Billing</span>
-                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>
                       <span>Sign out</span>
                     </DropdownMenuItem>

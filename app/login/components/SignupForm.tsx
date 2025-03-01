@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
+
 import {
   Select,
   SelectContent,
@@ -20,14 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+
 import { useRouter } from "next/navigation";
 import { SignupCredentials } from "@/lib/types/api";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -36,6 +29,8 @@ import {
   setError,
   clearSignupError,
 } from "@/lib/store/features/userSlice";
+import React from "react";
+import BirthdaySelect from "@/app/login/components/BirthdaySelect";
 
 export const SignupForm = () => {
   const dispatch = useAppDispatch();
@@ -57,6 +52,12 @@ export const SignupForm = () => {
 
   // 只使用 signup 相關的錯誤
   const signupError = errors.signup;
+
+  const [dateInputs, setDateInputs] = useState({
+    year: new Date().getFullYear(),
+    month: 1,
+    day: 1,
+  });
 
   const handleSignupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -86,48 +87,48 @@ export const SignupForm = () => {
     <form onSubmit={handleSignup}>
       <Card>
         <CardHeader>
-          <CardTitle>Signup</CardTitle>
-          <CardDescription>Create an account to continue</CardDescription>
+          <CardTitle>註冊</CardTitle>
+          <CardDescription>創建新帳號</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-5">
           <div className="space-y-1">
-            <Label htmlFor="username">Name</Label>
+            <Label htmlFor="username">用戶名稱</Label>
             <Input
               id="username"
-              placeholder="Username"
+              placeholder="請輸入用戶名稱"
               value={signupData.username}
               onChange={handleSignupChange}
               required
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">電子郵件</Label>
             <Input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder="請輸入電子郵件"
               value={signupData.email}
               onChange={handleSignupChange}
               required
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">密碼</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Password"
+              placeholder="請輸入密碼"
               value={signupData.password}
               onChange={handleSignupChange}
               required
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Label htmlFor="confirmPassword">確認密碼</Label>
             <Input
               id="confirmPassword"
               type="password"
-              placeholder="Confirm Password"
+              placeholder="請再次輸入密碼"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
@@ -145,7 +146,7 @@ export const SignupForm = () => {
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="選擇性別" />
+                <SelectValue placeholder="請選擇性別" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="true">女生</SelectItem>
@@ -153,61 +154,25 @@ export const SignupForm = () => {
               </SelectContent>
             </Select>
           </div>
+
           <div className="space-y-1">
-            <Label>生日</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !signupData.birthday && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {signupData.birthday ? (
-                    format(new Date(signupData.birthday), "PPP")
-                  ) : (
-                    <span>選擇生日</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0"
-                align="start"
-                side="top"
-                sideOffset={4}
-              >
-                <Calendar
-                  mode="single"
-                  selected={
-                    signupData.birthday
-                      ? new Date(signupData.birthday)
-                      : undefined
-                  }
-                  onSelect={(date) =>
-                    setSignupData((prev) => ({
-                      ...prev,
-                      birthday: date ? date.toISOString() : "",
-                    }))
-                  }
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <BirthdaySelect
+              dateInputs={dateInputs}
+              onDateChange={(date) => {
+                setDateInputs({
+                  year: date.getFullYear(),
+                  month: date.getMonth() + 1,
+                  day: date.getDate(),
+                });
+              }}
+            />
           </div>
-          {signupError && <p className="text-red-500">{signupError}</p>}
+          {signupError && <p className="text-sm text-red-500">{signupError}</p>}
         </CardContent>
         <CardFooter>
-          {loading ? (
-            <Button type="submit" className="w-full" disabled>
-              Signup
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full">
-              Signup
-            </Button>
-          )}
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "註冊中..." : "註冊"}
+          </Button>
         </CardFooter>
       </Card>
     </form>

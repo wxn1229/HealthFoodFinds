@@ -16,7 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 
-export const LoginForm = () => {
+export const LoginForm: React.FC<{ setTab: (tab: string) => void }> = ({
+  setTab,
+}) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -52,39 +54,44 @@ export const LoginForm = () => {
     <form onSubmit={handleLogin}>
       <Card>
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Login to your account to continue</CardDescription>
+          <CardTitle>登入</CardTitle>
+          <CardDescription>請輸入您的帳號密碼</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-4">
           <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">電子郵件</Label>
             <Input
               id="email"
               type="email"
-              placeholder="Email"
+              placeholder="請輸入電子郵件"
               value={loginData.email}
               onChange={handleLoginChange}
               required
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">密碼</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Password"
+              placeholder="請輸入密碼"
               value={loginData.password}
               onChange={handleLoginChange}
               required
             />
           </div>
-          {loginError && (
-            <div className="text-red-500 text-sm">{loginError}</div>
-          )}
+          {loginError && <p className="text-sm text-red-500">{loginError}</p>}
         </CardContent>
-        <CardFooter>
-          <Button type="submit" disabled={loading} className="w-full">
-            {loading ? "Logging in..." : "Login"}
+        <CardFooter className="flex flex-col gap-4">
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "登入中..." : "登入"}
+          </Button>
+          <Button
+            onClick={() => setTab("forgot")}
+            variant="link"
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            忘記密碼？
           </Button>
         </CardFooter>
       </Card>
