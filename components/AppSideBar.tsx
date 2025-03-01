@@ -73,7 +73,7 @@ export function AppSidebar() {
                     </>
                   ) : (
                     <>
-                      <User2 /> Login
+                      <User2 /> 會員
                       <ChevronUp className="ml-auto" />
                     </>
                   )}
