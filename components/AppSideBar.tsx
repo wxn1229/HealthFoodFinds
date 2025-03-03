@@ -35,6 +35,7 @@ export function AppSidebar() {
     dispatch(logout());
     router.push("/login");
   };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>

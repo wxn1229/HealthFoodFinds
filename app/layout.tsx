@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="overflow-hidden">
       <body className={` ${notoTC.variable} ${nunito.variable}  antialiased`}>
         <Providers>
           <AuthProvider>
@@ -38,10 +38,10 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <SidebarProvider>
+              <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="h-full w-full overflow-hidden">
-                  <div className="h-screen w-screen overflow-hidden ">
+                <main className="h-screen w-screen overflow-hidden">
+                  <div className="h-full w-full overflow-hidden ">
                     {children}
                   </div>
                 </main>

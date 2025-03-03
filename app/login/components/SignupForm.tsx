@@ -30,7 +30,15 @@ import {
   clearSignupError,
 } from "@/lib/store/features/userSlice";
 import React from "react";
-import BirthdaySelect from "@/app/login/components/BirthdaySelect";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
 
 export const SignupForm = () => {
   const dispatch = useAppDispatch();
@@ -52,12 +60,6 @@ export const SignupForm = () => {
 
   // 只使用 signup 相關的錯誤
   const signupError = errors.signup;
-
-  const [dateInputs, setDateInputs] = useState({
-    year: new Date().getFullYear(),
-    month: 1,
-    day: 1,
-  });
 
   const handleSignupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -155,17 +157,118 @@ export const SignupForm = () => {
             </Select>
           </div>
 
-          <div className="space-y-1">
-            <BirthdaySelect
-              dateInputs={dateInputs}
-              onDateChange={(date) => {
-                setDateInputs({
-                  year: date.getFullYear(),
-                  month: date.getMonth() + 1,
-                  day: date.getDate(),
-                });
-              }}
-            />
+          <div className="space-y-2">
+            <Label htmlFor="start-date">開始日期</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="start-date"
+                  variant={"outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !signupData.birthday && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {signupData.birthday
+                    ? format(new Date(signupData.birthday), "PPP")
+                    : "選擇日期"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={
+                    signupData.birthday
+                      ? new Date(signupData.birthday)
+                      : undefined
+                  }
+                  onSelect={(date) => {
+                    setSignupData({
+                      ...signupData,
+                      birthday: date ? date.toISOString() : "",
+                    });
+                  }}
+                  initialFocus
+                  month={
+                    signupData.birthday
+                      ? new Date(signupData.birthday)
+                      : new Date()
+                  }
+                  onMonthChange={(month) => {
+                    setSignupData({
+                      ...signupData,
+                      birthday: month.toISOString(),
+                    });
+                  }}
+                  components={{
+                    Caption: ({ displayMonth }) => {
+                      const years = Array.from(
+                        { length: 100 },
+                        (_, i) => new Date().getFullYear() - i
+                      );
+                      const months = [
+                        "一月",
+                        "二月",
+                        "三月",
+                        "四月",
+                        "五月",
+                        "六月",
+                        "七月",
+                        "八月",
+                        "九月",
+                        "十月",
+                        "十一月",
+                        "十二月",
+                      ];
+
+                      return (
+                        <div className="flex justify-center gap-1 items-center py-1">
+                          <select
+                            value={displayMonth.getFullYear()}
+                            onChange={(e) => {
+                              const newDate = new Date(displayMonth);
+                              newDate.setFullYear(
+                                Number.parseInt(e.target.value)
+                              );
+                              setSignupData({
+                                ...signupData,
+                                birthday: newDate.toISOString(),
+                              });
+                            }}
+                            className="z-10 px-2 py-1 text-sm rounded border border-input bg-background"
+                          >
+                            {years.map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
+                          </select>
+                          <select
+                            value={displayMonth.getMonth()}
+                            onChange={(e) => {
+                              const newDate = new Date(displayMonth);
+                              newDate.setMonth(Number.parseInt(e.target.value));
+                              setSignupData({
+                                ...signupData,
+                                birthday: newDate.toISOString(),
+                              });
+                            }}
+                            className="z-10 px-2 py-1 text-sm rounded border border-input bg-background"
+                          >
+                            {months.map((month, index) => (
+                              <option key={month} value={index}>
+                                {month}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    },
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           {signupError && <p className="text-sm text-red-500">{signupError}</p>}
         </CardContent>
