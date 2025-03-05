@@ -61,6 +61,9 @@ const ItemDetail = ({
       console.error(error);
     }
   };
+
+  const badgeColor =
+    item.CF.Id === "C1" || item.CF.Id === "C4" ? "bg-green-500" : "bg-red-500";
   return (
     <Card className="w-[70%] max-w-7xl mx-auto overflow-hidden p-4 mt-10">
       <div className="md:flex">
@@ -90,7 +93,10 @@ const ItemDetail = ({
                 <p className="text-muted-foreground">{item?.Applicant.Name}</p>
               </div>
               <div className="flex items-center gap-2 self-start">
-                <Badge variant="outline" className="font-medium">
+                <Badge
+                  variant="outline"
+                  className={`font-medium ${badgeColor} text-white`}
+                >
                   {item?.CF.Name}
                 </Badge>
                 <div className="flex items-center gap-1">

@@ -49,6 +49,8 @@ const ItemCard = ({
       console.error(error);
     }
   };
+  const badgeColor =
+    item.CF.Id === "C1" || item.CF.Id === "C4" ? "bg-green-500" : "bg-red-500";
 
   return (
     <Card className="w-full h-full flex flex-col overflow-hidden">
@@ -61,8 +63,8 @@ const ItemCard = ({
           className="object-cover"
         />
         <Badge
-          variant="outline"
-          className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+          variant="secondary"
+          className={`absolute top-2 right-2  backdrop-blur-sm ${badgeColor} text-white`}
         >
           {item.CF.Name}
         </Badge>

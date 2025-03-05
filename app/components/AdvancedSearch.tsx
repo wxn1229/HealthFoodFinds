@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { CalendarIcon, Search } from "lucide-react";
 import { format } from "date-fns";
@@ -30,11 +32,13 @@ import { Calendar } from "@/components/ui/calendar";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setSearchCondition } from "@/lib/store/features/searchSlice";
 import { SelectData } from "@/lib/types/search";
+import { useRouter } from "next/navigation";
 
 const AdvancedSearch = ({ selectData }: { selectData: SelectData }) => {
   // Advanced search state
   const dispatch = useAppDispatch();
   const searchCondition = useAppSelector((state) => state.search);
+  const router = useRouter();
   // Open states for advanced comboboxes
   const [openAdvApplicant, setOpenAdvApplicant] = useState(false);
   const [openAdvCertification, setOpenAdvCertification] = useState(false);
@@ -44,6 +48,8 @@ const AdvancedSearch = ({ selectData }: { selectData: SelectData }) => {
   const handleAdvancedSearch = () => {
     console.log("Advanced Search:", searchCondition);
     // Implement your search logic here
+
+    router.push("/searchresult");
   };
 
   return (

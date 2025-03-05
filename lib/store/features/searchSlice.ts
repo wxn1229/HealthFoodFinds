@@ -143,6 +143,7 @@ const searchSlice = createSlice({
       state.id = "";
       state.startDate = null;
       state.endDate = null;
+      state.page = 1;
     },
   },
   extraReducers: (builder) => {

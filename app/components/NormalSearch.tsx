@@ -1,3 +1,4 @@
+"use client";
 import {
   Command,
   CommandEmpty,
@@ -26,12 +27,13 @@ import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setSearchCondition } from "@/lib/store/features/searchSlice";
 import { SelectData } from "@/lib/types/search";
+import { useRouter } from "next/navigation";
 
 const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
   // Normal search state
   const dispatch = useAppDispatch();
   const searchCondition = useAppSelector((state) => state.search);
-
+  const router = useRouter();
   // Open states for comboboxes
   const [openApplicant, setOpenApplicant] = useState(false);
   const [openCertification, setOpenCertification] = useState(false);
@@ -40,7 +42,8 @@ const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
 
   const handleNormalSearch = () => {
     console.log("Normal Search:");
-    // Implement your search logic here
+
+    router.push("/searchresult");
   };
 
   return (
@@ -96,12 +99,12 @@ const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
                     {selectData.applicant.map((applicant) => (
                       <CommandItem
                         key={applicant.Id}
-                        value={applicant.Id}
-                        onSelect={(currentValue) => {
+                        value={applicant.Name}
+                        onSelect={() => {
                           dispatch(
                             setSearchCondition({
                               ...searchCondition,
-                              applicant: currentValue,
+                              applicant: applicant.Id,
                             })
                           );
                           setOpenApplicant(false);
@@ -144,11 +147,11 @@ const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
                       <CommandItem
                         key={cert.Id}
                         value={cert.Id}
-                        onSelect={(currentValue) => {
+                        onSelect={() => {
                           dispatch(
                             setSearchCondition({
                               ...searchCondition,
-                              certification: currentValue,
+                              certification: cert.Id,
                             })
                           );
                           setOpenCertification(false);
@@ -191,12 +194,12 @@ const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
                     {selectData.ingredient.map((ingredient) => (
                       <CommandItem
                         key={ingredient.Id}
-                        value={ingredient.Id}
-                        onSelect={(currentValue) => {
+                        value={ingredient.Name}
+                        onSelect={() => {
                           dispatch(
                             setSearchCondition({
                               ...searchCondition,
-                              ingredient: currentValue,
+                              ingredient: ingredient.Id,
                             })
                           );
                           setOpenIngredient(false);
@@ -238,12 +241,12 @@ const NormalSearch = ({ selectData }: { selectData: SelectData }) => {
                     {selectData.benefit.map((benefit) => (
                       <CommandItem
                         key={benefit.Id}
-                        value={benefit.Id}
-                        onSelect={(currentValue) => {
+                        value={benefit.Name}
+                        onSelect={() => {
                           dispatch(
                             setSearchCondition({
                               ...searchCondition,
-                              benefit: currentValue,
+                              benefit: benefit.Id,
                             })
                           );
                           setOpenBenefit(false);
