@@ -63,7 +63,9 @@ const ItemDetail = ({
   };
 
   const badgeColor =
-    item.CF.Id === "C1" || item.CF.Id === "C4" ? "bg-green-500" : "bg-red-500";
+    item?.CF.Id === "C1" || item?.CF.Id === "C4"
+      ? "bg-green-500"
+      : "bg-red-500";
   return (
     <Card className="w-[70%] max-w-7xl mx-auto overflow-hidden p-4 mt-10">
       <div className="md:flex">
