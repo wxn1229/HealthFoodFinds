@@ -5,6 +5,8 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
@@ -25,6 +27,7 @@ import { useRouter } from "next/navigation";
 import { logout } from "@/lib/store/features/userSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import ThemeToggle from "@/components/ThemeToggle";
+import { routes } from "@/lib/data/route";
 
 export function AppSidebar() {
   const dispatch = useAppDispatch();
@@ -51,8 +54,23 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroup />
+        <SidebarGroup>
+          <SidebarGroupLabel>Projects</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {routes.map((route) => (
+                <SidebarMenuItem key={route.name}>
+                  <SidebarMenuButton asChild>
+                    <Link href={route.path}>
+                      <route.icon />
+                      <span>{route.name}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         {state === "collapsed" && (

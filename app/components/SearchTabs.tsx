@@ -12,7 +12,7 @@ export default function SearchTabs({ selectData }: { selectData: SelectData }) {
   const [searchTab, setSearchTab] = useState("normal");
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4">
+    <div className="w-full max-w-4xl mx-auto p-4 h-full">
       <Tabs
         defaultValue="normal"
         value={searchTab}

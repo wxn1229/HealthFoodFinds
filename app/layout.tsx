@@ -6,6 +6,7 @@ import { Providers } from "@/lib/store/provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSideBar";
 import { AuthProvider } from "./providers/AuthProvider";
+import Main from "@/app/components/Main";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -40,11 +41,7 @@ export default function RootLayout({
             >
               <SidebarProvider defaultOpen={false}>
                 <AppSidebar />
-                <main className="h-screen w-screen overflow-hidden">
-                  <div className="h-full w-full overflow-hidden ">
-                    {children}
-                  </div>
-                </main>
+                <Main>{children}</Main>
               </SidebarProvider>
             </ThemeProvider>
           </AuthProvider>
